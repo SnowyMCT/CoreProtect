@@ -26,3 +26,15 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build
         run: mvn -B verify
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Plugin
+          path: target/*.jar
+        
+      - name: Upload to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
